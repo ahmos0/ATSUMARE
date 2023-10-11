@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.android.volley.BuildConfig
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -25,13 +26,14 @@ class MainActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GoogleMapScreen()
+            BottomBar()
+            TopAppBarSample()
         }
     }
 }
 
 @Composable
-fun GoogleMapScreen() {
+fun GoogleMapScreen(modifier: Modifier = Modifier) {
     var mapView: MapView? by remember { mutableStateOf(null) }
 
     AndroidView(
@@ -56,4 +58,9 @@ fun GoogleMapScreen() {
         }
     )
 
+}
+@Preview(showBackground = true)
+@Composable
+fun Preview() {
+    //GoogleMapScreen()
 }
