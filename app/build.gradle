@@ -7,7 +7,7 @@ plugins {
 android {
     signingConfigs {
         config {
-            storeFile file('/Users/hamada/AndroidStudioProjects/ATUMARE/new_keystore.keystore')
+            storeFile file('../new_keystore.keystore')
             storePassword 'hogeRita24g'
             keyAlias 'new_alias'
             keyPassword 'hogeRita24g'
@@ -79,6 +79,13 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
+    implementation "androidx.navigation:navigation-compose:2.7.4"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation("aws.sdk.kotlin:dynamodb:0.9.4-beta")
+    implementation("aws.sdk.kotlin:sns:0.9.4-beta")  {
+        exclude group: "xmlpull", module: "xmlpull"
+    }
+
 }

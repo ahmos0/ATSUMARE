@@ -1,5 +1,6 @@
 package com.example.googlemapapi
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -53,31 +54,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 
-/*@Composable
-fun BottomBar(modifier: Modifier = Modifier){
-    val carImage: Painter = painterResource(R.drawable.directions_car_24px)
-
-    BottomAppBar(
-        modifier = modifier
-            .height(65.dp)
-            .fillMaxWidth(),
-        //backgroundColor = /* 任意の色を指定 */,
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
-    ) {
-        // BottomAppBar 内に IconButton を配置
-        IconButton(
-            onClick = {
-                // アイコンがクリックされたときのアクションを追加
-            },
-            modifier = Modifier.padding(8.dp)
-        ) {
-            // アイコンを表示
-            Icon(painter = carImage, contentDescription = null)
-        }
-
-        // 他のアイコンやコンポーネントも追加できます
-    }
-}*/
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +70,7 @@ fun TopAppBarSample() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(modifier: Modifier = Modifier) {
+fun BottomBar(navController: NavController,modifier: Modifier = Modifier) {
     val carImage: Painter = painterResource(R.drawable.directions_car_24px)
     val peopleImage: Painter = painterResource(R.drawable.emoji_people_24px)
     val ImageSizeModifier = Modifier
@@ -110,17 +86,17 @@ fun BottomBar(modifier: Modifier = Modifier) {
                 containerColor = Color.White,
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
             ) {
-                // アクション領域内でのアイコンの位置調整
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = {navController.navigate("anotherScreen") }) {
                         Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
                     }
-                    FloatingActionButton(onClick = { /*TODO*/ }, shape = androidx.compose.foundation.shape.CircleShape ){
+                    FloatingActionButton(onClick = { /*TODO*/ },
+                        shape = androidx.compose.foundation.shape.CircleShape ){
                         Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                     }
                     IconButton(onClick = { /* do something */ }) {
