@@ -1,4 +1,5 @@
 package com.example.googlemapapi
+
 import java.util.UUID
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
@@ -6,41 +7,35 @@ import aws.sdk.kotlin.services.dynamodb.model.PutItemRequest
 import aws.sdk.kotlin.services.dynamodb.model.DynamoDbException
 import kotlin.system.exitProcess
 
-/*fun main(){
-    val randomUUID = UUID.randomUUID()
-    println("UUID: $randomUUID")
-}*/
-
 class Database {
-
     suspend fun putItemInTable(
         ddb: DynamoDbClient,
         tableNameVal: String,
-        key: String,
-        keyVal: String,
-        moneyTotal: String,
-        moneyTotalValue: String,
+        uuid: UUID = UUID.randomUUID(),
         name: String,
-        nameValue: String,
-        email: String,
-        emailVal: String
+        departurePoint: String,
+        destination: String,
+        departureTime: String,
+        capacity: String
     ) {
         val itemValues = mutableMapOf<String, AttributeValue>()
 
         // Add all content to the table.
-        itemValues[key] = AttributeValue.S(keyVal)
-        itemValues[moneyTotal] =  AttributeValue.S(moneyTotalValue)
-        itemValues[name] = AttributeValue.S(nameValue)
-        itemValues[email] = AttributeValue.S(emailVal)
+        itemValues["uuid"] = AttributeValue.S(uuid.toString())
+        itemValues["name"] = AttributeValue.S(name)
+        itemValues["departurePoint"] = AttributeValue.S(departurePoint)
+        itemValues["destination"] = AttributeValue.S(destination)
+        itemValues["departureTime"] = AttributeValue.S(departureTime)
+        itemValues["capacity"] = AttributeValue.S(capacity)
 
         val request = PutItemRequest {
-            tableName=tableNameVal
+            tableName = tableNameVal
             item = itemValues
         }
 
         try {
             ddb.putItem(request)
-            println(" A new item was placed into $tableNameVal.")
+            println("A new item was placed into $tableNameVal.")
 
         } catch (ex: DynamoDbException) {
             println(ex.message)
@@ -49,5 +44,3 @@ class Database {
         }
     }
 }
-
-

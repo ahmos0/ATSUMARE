@@ -65,7 +65,6 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
             val newMapView = MapView(context)
             newMapView.onCreate(Bundle())
             newMapView.getMapAsync { googleMap ->
-                // Google Map is ready
                 val latLng = LatLng(37.523611, 139.937778)
                 val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
                 googleMap.moveCamera(cameraUpdate)
