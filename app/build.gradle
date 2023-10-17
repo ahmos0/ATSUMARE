@@ -2,7 +2,15 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.apollographql.apollo3'
 }
+
+def localProperties = new Properties()
+localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+def awsAccessKey = localProperties['awsAccessKey'] ?: ""
+def awsSecretKey = localProperties['awsSecretKey'] ?: ""
+def awsEndpoint = localProperties['awsEndpoint'] ?: ""
 
 android {
     signingConfigs {
@@ -13,12 +21,17 @@ android {
             keyPassword 'hogeRita24g'
         }
     }
+
+    buildFeatures {
+        buildConfig true
+    }
+
     namespace 'com.example.googlemapapi'
     compileSdk 34
 
     defaultConfig {
         applicationId "com.example.googlemapapi"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -27,6 +40,10 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField "String", "AWS_ACCESS_KEY", "\"${awsAccessKey}\""
+        buildConfigField "String", "AWS_SECRET_KEY", "\"${awsSecretKey}\""
+        buildConfigField "String", "AWS_ENDPOINT", "\"${awsEndpoint}\""
     }
 
     buildTypes {
@@ -52,11 +69,25 @@ android {
         kotlinCompilerExtensionVersion '1.4.3'
     }
     packagingOptions {
-        resources {
+        /*resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
+        }*/
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/io.netty.versions.properties'
     }
 }
+
+apollo {
+
+    service("YourServiceName") {
+        packageName.set("com.example.googlemapapi")
+    }
+}
+
+
 
 dependencies {
 
@@ -82,9 +113,15 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.7.4"
     //implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.20'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
-    implementation("aws.sdk.kotlin:dynamodb:0.9.4-beta")
-    implementation("aws.sdk.kotlin:sns:0.9.4-beta")  {
+    //implementation("aws.sdk.kotlin:dynamodb:0.9.4-beta")
+    /*implementation("aws.sdk.kotlin:sns:0.9.4-beta")  {
         exclude group: "xmlpull", module: "xmlpull"
-    }
-
+    }*/
+    implementation(platform("software.amazon.awssdk:bom:2.20.56"))
+    implementation("software.amazon.awssdk:dynamodb")
+    implementation("software.amazon.awssdk:dynamodb-enhanced")
+    implementation 'com.apollographql.apollo3:apollo-runtime:3.8.2'
+    implementation'com.apollographql.apollo3:apollo-api:3.8.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 }

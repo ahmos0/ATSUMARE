@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.compose.runtime.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,14 +14,17 @@ import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.KeyboardType
-import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest
+import software.amazon.awssdk.services.dynamodb.model.DynamoDbException
+import java.util.UUID
 
 @Composable
 fun AnotherScreen(navController: NavController){
-    /*Column {
-        TopAppBarSample()
-        BottomBar(navController)
-    }*/
     RegistrationScreen()
 }
 
@@ -86,9 +88,8 @@ fun RegistrationScreen() {
     }
     //DB処理をボタンを押されたらするように
     LaunchedEffect(isButtonClicked) {
-        if(isButtonClicked) {
-            val ddb = DynamoDbClient { region = "ap-northeast-1" }
-            val database = Database()
+        if (isButtonClicked) {
+            val dataBase = DataBase() // データベースクラスのインスタンスを作成
 
             val nameValue = name.text
             val departureValue = departure.text
@@ -96,28 +97,23 @@ fun RegistrationScreen() {
             val departureTimeValue = departureTime.text
             val capacityValue = capacity.text
 
+            // GraphQL ミューテーションを非同期に実行
             try {
-                database.putItemInTable(
-                    ddb = ddb,
-                    tableNameVal = "DepatureManageTable",
+                dataBase.executeMutation(
+                    uuid = UUID.randomUUID().toString(),
                     name = nameValue,
-                    departurePoint = departureValue,
+                    departure = departureValue,
                     destination = destinationValue,
-                    departureTime = departureTimeValue,
-                    capacity = capacityValue
+                    time = departureTimeValue,
+                    capacity = capacityValue.toInt(),
                 )
+                println("hoge");
             } catch (e: Exception) {
-                // ここでエラーを適切に処理またはロギング
-                println("Error while inserting data to DynamoDB: ${e.message}")
+                // エラーハンドリング
+                e.printStackTrace()
             } finally {
-                // 必要に応じてDynamoDbClientをクローズ
-                ddb.close()
+                isButtonClicked = false
             }
-
-            isButtonClicked = false
         }
     }
-
-
-
 }
