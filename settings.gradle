@@ -2,7 +2,11 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://www.apollographql.com/releases/jvm/dev' }
         gradlePluginPortal()
+    }
+    plugins {
+        id 'com.apollographql.apollo3' version '3.8.2'
     }
 }
 dependencyResolutionManagement {
