@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.KeyboardType
+import com.google.android.gms.wallet.button.ButtonConstants
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
@@ -82,7 +84,12 @@ fun RegistrationScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
             isButtonClicked = true
-        }) {
+        },
+            /*colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Red,
+                contentColor = Color.White
+            )*/
+        ) {
             Text("登録")
         }
     }
