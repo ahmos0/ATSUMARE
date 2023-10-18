@@ -11,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 class DataBase {
 
     private val apolloClient = ApolloClient.Builder()
-        .serverUrl("http://10.0.2.2:8080/graphql")
+        .serverUrl(BuildConfig.serverEndPoint)
         .okHttpClient(
             OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

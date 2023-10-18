@@ -11,6 +11,8 @@ localProperties.load(project.rootProject.file('local.properties').newDataInputSt
 def awsAccessKey = localProperties['awsAccessKey'] ?: ""
 def awsSecretKey = localProperties['awsSecretKey'] ?: ""
 def awsEndpoint = localProperties['awsEndpoint'] ?: ""
+def serverEndPoint = localProperties['SERVER_END_POINT'] ?: ""
+
 
 android {
     signingConfigs {
@@ -50,6 +52,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'SERVER_END_POINT', "\"${serverEndPoint}\""
         }
         debug {
             signingConfig signingConfigs.config
