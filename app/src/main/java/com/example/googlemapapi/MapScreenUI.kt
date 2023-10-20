@@ -79,7 +79,7 @@ fun BottomBar(navController: NavController,modifier: Modifier = Modifier) {
                         shape = androidx.compose.foundation.shape.CircleShape ){
                         Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                     }
-                    IconButton(onClick = {buttonClicked = true}) {
+                    IconButton(onClick = {navController.navigate("JoinScreen")}) {
                         Icon(
                             peopleImage,
                             contentDescription = "Localized description",
@@ -93,26 +93,12 @@ fun BottomBar(navController: NavController,modifier: Modifier = Modifier) {
         GoogleMapScreen(modifier = Modifier.padding(innerPadding))
     }
 
-    LaunchedEffect(buttonClicked) {
-        if (buttonClicked) {
-            val dataBase = DataBase() // データベースクラスのインスタンスを作成
-            try {
-                items = dataBase.fetchAllItems()
-            } catch (e: Exception) {
-                // エラーハンドリング
-                e.printStackTrace()
-            } finally {
-                buttonClicked = false
-            }
-        }
-    }
-    val currentItems = items // 一時変数にitemsを格納
+    val currentItems = items
 
-    // items を使用して結果を表示
     if (currentItems != null) {
         Column {
             currentItems.forEach { item ->
-                Text(text = item.toString())  // ここで適切なプロパティや表示方法に変更してください
+                Text(text = item.toString())
             }
         }
     } else {
