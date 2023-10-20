@@ -81,12 +81,8 @@ android {
 }
 
 apollo {
-
-    service("YourServiceName") {
-        packageName.set("com.example.googlemapapi")
-    }
+    packageName.set("com.example.googlemapapi")
 }
-
 
 
 dependencies {

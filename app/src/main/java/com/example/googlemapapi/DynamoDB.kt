@@ -44,4 +44,19 @@ class DataBase {
             // Handle the error
         }
     }
+
+    suspend fun fetchAllItems(): List<AllItemsQuery.AllItem>? {
+        val query = AllItemsQuery()
+
+        try {
+            val call: ApolloCall<AllItemsQuery.Data> = apolloClient.query(query)
+            val response: ApolloResponse<AllItemsQuery.Data> = call.execute()
+            return response.data?.allItems?.filterNotNull()
+        } catch (e: ApolloException) {
+            // Handle the error
+            e.printStackTrace()
+            return null
+        }
+    }
+
 }

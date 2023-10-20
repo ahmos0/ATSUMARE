@@ -1,0 +1,10 @@
+query AllItems {
+    allItems {
+        uuid
+        name
+        departure
+        destination
+        time
+        capacity
+    }
+}
