@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -96,14 +97,15 @@ fun BottomBar(navController: NavController,modifier: Modifier = Modifier) {
                         Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
                     }
                     FloatingActionButton(onClick = { /*TODO*/ },
-                        shape = androidx.compose.foundation.shape.CircleShape ){
+                        shape = CircleShape,
+                        containerColor = Color(204,102,119)){
                         Icon(imageVector = Icons.Filled.Add, contentDescription = null)
                     }
                     IconButton(onClick = { /* do something */ }) {
                         Icon(
                             peopleImage,
                             contentDescription = "Localized description",
-                            modifier = ImageSizeModifier
+                            modifier = ImageSizeModifier,
                         )
                     }
                 }
