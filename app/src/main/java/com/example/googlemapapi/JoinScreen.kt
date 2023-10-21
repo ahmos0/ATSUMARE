@@ -61,7 +61,7 @@ fun ItemRow(item: AllItemsQuery.AllItem){
             Text(text = item.name ?: "N/A")
             Text(text = "${item.departure} -> ${item.destination}")
             Text(text = item.time ?: "N/A")
-            Text(text = "${item.capacity} seats")
+            Text(text = "${item.passenger}/${item.capacity}")
         }
     }
 }
