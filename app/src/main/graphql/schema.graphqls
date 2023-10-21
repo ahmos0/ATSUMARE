@@ -50,7 +50,7 @@ type __Field {
 }
 
 type Mutation {
-  putItem("" time: String!, "" capacity: Int!, "" uuid: String!, "" name: String!, "" departure: String!, "" destination: String!): Item
+  putItem("" time: String!, "" capacity: Int!, "" uuid: String!, "" name: String!, "" departure: String!, "" destination: String!, "" passenger: Int!): Item
 }
 
 """
@@ -94,6 +94,8 @@ type Item {
   time: String
 
   uuid: String
+
+  passenger: Int
 }
 
 """

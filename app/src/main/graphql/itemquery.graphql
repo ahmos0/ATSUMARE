@@ -6,5 +6,6 @@ query AllItems {
         destination
         time
         capacity
+        passenger
     }
 }

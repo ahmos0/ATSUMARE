@@ -24,14 +24,16 @@ class DataBase {
                                 departure: String,
                                 destination: String,
                                 time: String,
-                                capacity: Int) {
+                                capacity: Int,
+                                passenger: Int) {
         val mutation = PutItemMutation(
             uuid = uuid,
             name = name,
             departure = departure,
             destination = destination,
             time = time,
-            capacity = capacity
+            capacity = capacity,
+            passenger = passenger
         )
 
         try {

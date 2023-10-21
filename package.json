@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ahmos0/ATUMARE#readme",
   "dependencies": {
+    "@apollo/client": "^3.8.6",
     "graphql": "^16.8.1"
   }
 }

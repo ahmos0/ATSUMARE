@@ -1,11 +1,12 @@
-mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destination: String!, $time: String!, $capacity: Int!) {
-    putItem(uuid: $uuid, name: $name, departure: $departure, destination: $destination, time: $time, capacity: $capacity) {
+mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destination: String!, $time: String!, $capacity: Int!, $passenger: Int!) {
+    putItem(uuid: $uuid, name: $name, departure: $departure, destination: $destination, time: $time, capacity: $capacity, passenger: $passenger) {
         uuid
         name
         departure
         destination
         time
         capacity
+        passenger
     }
 }
 
