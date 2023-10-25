@@ -41,6 +41,10 @@ class MainActivity : ComponentActivity() {
                     // ここに移動先の画面を設定
                     AnotherScreen(navController)
                 }
+                composable("JoinScreen") {
+                    // ここに移動先の画面を設定
+                    JoinScreen(navController)
+                }
             }
         }
     }

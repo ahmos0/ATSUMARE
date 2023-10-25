@@ -1,0 +1,23 @@
+{
+  "name": "atumare",
+  "version": "1.0.0",
+  "description": "issueごとにブランチを切っていく。issueは自分で立てて大丈夫です。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmos0/ATUMARE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahmos0/ATUMARE/issues"
+  },
+  "homepage": "https://github.com/ahmos0/ATUMARE#readme",
+  "dependencies": {
+    "@apollo/client": "^3.8.6",
+    "graphql": "^16.8.1"
+  }
+}
