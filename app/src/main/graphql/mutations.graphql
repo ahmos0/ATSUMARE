@@ -9,4 +9,14 @@ mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destinati
         passenger
     }
 }
-
+mutation IncrementPassenger($uuid: String!, $name: String!) {
+    incrementPassenger(uuid: $uuid, name: $name) {
+        uuid
+        name
+        departure
+        destination
+        time
+        capacity
+        passenger
+    }
+}

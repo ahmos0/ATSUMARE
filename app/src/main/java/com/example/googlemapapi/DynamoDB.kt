@@ -61,4 +61,18 @@ class DataBase {
         }
     }
 
+    suspend fun incrementPassenger(uuid: String, name: String) {
+        val mutation = IncrementPassengerMutation(uuid, name)
+
+        try {
+            val call: ApolloCall<IncrementPassengerMutation.Data> = apolloClient.mutate(mutation)
+            val response: ApolloResponse<IncrementPassengerMutation.Data> = call.execute()
+            val updatedItem = response.data?.incrementPassenger
+            println("Updated Passenger Count: ${updatedItem?.passenger}")
+        } catch (e: ApolloException) {
+            // エラー処理
+            e.printStackTrace()
+        }
+    }
+
 }

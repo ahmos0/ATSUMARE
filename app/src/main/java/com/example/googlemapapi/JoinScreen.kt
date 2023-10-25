@@ -20,12 +20,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.apollographql.apollo3.ApolloCall
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
+import com.apollographql.apollo3.network.okHttpClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import org.chromium.base.Callback
 
 @Composable
 fun JoinScreen(navController: NavController) {
     var items by remember { mutableStateOf<List<AllItemsQuery.AllItem>?>(null) }
+    var updateTrigger by remember { mutableStateOf(0) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(updateTrigger) {
         val dataBase = DataBase()
         try {
             items = dataBase.fetchAllItems()
@@ -33,24 +45,34 @@ fun JoinScreen(navController: NavController) {
             e.printStackTrace()
         }
     }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
         items(items ?: emptyList()) { item ->
-            // 各アイテムを表示するUI
-            ItemRow(item)
+            ItemRow(item, onItemClicked = {
+                updateTrigger++
+            })
         }
     }
 }
 
 @Composable
-fun ItemRow(item: AllItemsQuery.AllItem){
+fun ItemRow(item: AllItemsQuery.AllItem, onItemClicked: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-            .clickable { /* アイテムクリック時の処理 */ },
+            .clickable {
+                val uuid = item.uuid ?: throw IllegalArgumentException("UUID is null")
+                val name = item.name ?: throw IllegalArgumentException("name is null")
+                CoroutineScope(Dispatchers.IO).launch {
+                    val dataBase = DataBase()
+                    dataBase.incrementPassenger(uuid, name)
+                    onItemClicked()
+                }
+            },
     ) {
         Row(
             modifier = Modifier
