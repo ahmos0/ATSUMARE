@@ -24,14 +24,16 @@ class DataBase {
                                 departure: String,
                                 destination: String,
                                 time: String,
-                                capacity: Int) {
+                                capacity: Int,
+                                passenger: Int) {
         val mutation = PutItemMutation(
             uuid = uuid,
             name = name,
             departure = departure,
             destination = destination,
             time = time,
-            capacity = capacity
+            capacity = capacity,
+            passenger = passenger
         )
 
         try {
@@ -44,4 +46,33 @@ class DataBase {
             // Handle the error
         }
     }
+
+    suspend fun fetchAllItems(): List<AllItemsQuery.AllItem>? {
+        val query = AllItemsQuery()
+
+        try {
+            val call: ApolloCall<AllItemsQuery.Data> = apolloClient.query(query)
+            val response: ApolloResponse<AllItemsQuery.Data> = call.execute()
+            return response.data?.allItems?.filterNotNull()
+        } catch (e: ApolloException) {
+            // Handle the error
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    suspend fun incrementPassenger(uuid: String, name: String) {
+        val mutation = IncrementPassengerMutation(uuid, name)
+
+        try {
+            val call: ApolloCall<IncrementPassengerMutation.Data> = apolloClient.mutate(mutation)
+            val response: ApolloResponse<IncrementPassengerMutation.Data> = call.execute()
+            val updatedItem = response.data?.incrementPassenger
+            println("Updated Passenger Count: ${updatedItem?.passenger}")
+        } catch (e: ApolloException) {
+            // エラー処理
+            e.printStackTrace()
+        }
+    }
+
 }

@@ -113,6 +113,7 @@ fun RegistrationScreen() {
                     destination = destinationValue,
                     time = departureTimeValue,
                     capacity = capacityValue.toInt(),
+                    passenger = 0
                 )
                 println("hoge");
             } catch (e: Exception) {
