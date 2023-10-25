@@ -20,17 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.apollographql.apollo3.ApolloCall
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.exception.ApolloException
-import com.apollographql.apollo3.network.okHttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
-import org.chromium.base.Callback
+
 
 @Composable
 fun JoinScreen(navController: NavController) {
