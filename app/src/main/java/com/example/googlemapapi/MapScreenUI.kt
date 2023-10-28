@@ -37,14 +37,16 @@ fun TopAppBarSample() {
         title = {
             Text(
                 text = "ATUMARE",
-                modifier = Modifier.fillMaxWidth() .offset(x = (-10).dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(x = (-10).dp),
                 textAlign = TextAlign.Center
             )
         }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
     val carImage: Painter = painterResource(R.drawable.directions_car_24px)
@@ -67,11 +69,87 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
             }
         }
     ) { innerPadding ->
+        //MapMarker(modifier = Modifier.padding(innerPadding))
+        GoogleMapScreen(modifier = Modifier.padding(innerPadding))
+    }
+}*/
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
+    val carImage: Painter = painterResource(R.drawable.directions_car_24px)
+    val peopleImage: Painter = painterResource(R.drawable.emoji_people_24px)
+    val buttonImage: Painter = painterResource(R.drawable.radio_button_checked_24px)
+    val ImageSizeModifier = Modifier.size(70.dp)
+
+    Scaffold(
+        bottomBar = {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BottomBarContent(
+                    carImage = carImage,
+                    peopleImage = peopleImage,
+                    ImageSizeModifier = ImageSizeModifier,
+                    navController = navController
+                )
+                FloatingActionOverlayButton(
+                    buttonImage = buttonImage
+                )
+            }
+        }
+    ) { innerPadding ->
         GoogleMapScreen(modifier = Modifier.padding(innerPadding))
     }
 }
 
 @Composable
+fun BottomBarContent(
+    carImage: Painter,
+    peopleImage: Painter,
+    ImageSizeModifier: Modifier,
+    navController: NavController
+) {
+    BottomAppBar(
+        modifier = Modifier
+            .height(72.dp)
+            .fillMaxWidth(),
+        containerColor = Color.White,
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(onClick = { navController.navigate("anotherScreen") }) {
+                    Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
+                }
+                Text(text = "ATUMERU")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(onClick = { navController.navigate("JoinScreen") }) {
+                    Icon(
+                        peopleImage,
+                        contentDescription = "Localized description",
+                        modifier = ImageSizeModifier
+                    )
+                }
+                Text(text = "ATUMARU")
+            }
+        }
+    }
+}
+
+
+/*@Composable
 fun BottomBarContent(
     carImage: Painter,
     peopleImage: Painter,
@@ -90,7 +168,7 @@ fun BottomBarContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
-                .offset(x = 10.dp), //アイコン二つを右にずらす
+                .offset(x = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
@@ -124,6 +202,71 @@ fun FloatingActionOverlayButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .offset(y = 275.dp, x = (-157).dp)
+                .size(75.dp),
+            shape = CircleShape,
+            containerColor = Color(228, 98, 102)
+        ) {
+            Icon(buttonImage, contentDescription = null, Modifier.size(45.dp))
+        }
+    }
+}*/
+
+/*@Composable
+fun BottomBarContent(
+    carImage: Painter,
+    peopleImage: Painter,
+    ImageSizeModifier: Modifier,
+    navController: NavController
+) {
+    BottomAppBar(
+        modifier = Modifier
+            .height(72.dp)
+            .fillMaxWidth(),
+        containerColor = Color.White,
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp), // ここを調整
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(onClick = { navController.navigate("anotherScreen") }) {
+                    Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
+                }
+                Text(text = "ATUMERU")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(onClick = { navController.navigate("JoinScreen") }) {
+                    Icon(
+                        peopleImage,
+                        contentDescription = "Localized description",
+                        modifier = ImageSizeModifier
+                    )
+                }
+                Text(text = "ATUMARU")
+            }
+        }
+    }
+}*/
+
+@Composable
+fun FloatingActionOverlayButton(
+    buttonImage: Painter,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(), // 必要に応じて修正してください
+        contentAlignment = Alignment.Center
+    ) {
+        FloatingActionButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp) // ここでボタンの位置を調整
                 .size(75.dp),
             shape = CircleShape,
             containerColor = Color(228, 98, 102)

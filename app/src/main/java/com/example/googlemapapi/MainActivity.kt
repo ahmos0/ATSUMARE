@@ -1,10 +1,9 @@
 package com.example.googlemapapi
 
-import android.location.Location
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -15,21 +14,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.android.volley.BuildConfig
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!Places.isInitialized()) {
+            Places.initialize(applicationContext, "GOOGLE_MAPS_API_KEY")
+        }
+
         setContent {
             val navController = rememberNavController()
 
@@ -72,6 +70,17 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
                 val latLng = LatLng(37.523611, 139.937778)
                 val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
                 googleMap.moveCamera(cameraUpdate)
+
+
+                googleMap.setOnMapClickListener { clickedLatLng ->
+                    googleMap.clear()
+
+                    val geocoder = Geocoder(context)
+                    val addresses = geocoder.getFromLocation(clickedLatLng.latitude, clickedLatLng.longitude, 1)
+                    val locationName = addresses?.getOrNull(0)?.getAddressLine(0) ?: "Unknown Location"
+
+                    googleMap.addMarker(MarkerOptions().position(clickedLatLng)/*.title(locationName)*/)
+                }
             }
             mapView = newMapView
             newMapView
@@ -84,7 +93,9 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
         }
     )
 
+
 }
+
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
