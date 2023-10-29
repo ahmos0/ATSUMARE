@@ -1,10 +1,9 @@
 package com.example.googlemapapi
 
-import android.location.Location
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -15,16 +14,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.android.volley.BuildConfig
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 
 class MainActivity : ComponentActivity() {
@@ -38,12 +31,13 @@ class MainActivity : ComponentActivity() {
                     MainScreen(navController)
                 }
                 composable("anotherScreen") {
-                    // ここに移動先の画面を設定
                     AnotherScreen(navController)
                 }
                 composable("JoinScreen") {
-                    // ここに移動先の画面を設定
                     JoinScreen(navController)
+                }
+                composable("Instant") {
+                    InstantMap(navController)
                 }
             }
         }
@@ -83,8 +77,9 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
             }
         }
     )
-
 }
+
+
 @Preview(showBackground = true)
 @Composable
 fun Preview() {
