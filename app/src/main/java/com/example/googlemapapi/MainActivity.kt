@@ -43,6 +43,9 @@ class MainActivity : ComponentActivity() {
                     // ここに移動先の画面を設定
                     JoinScreen(navController)
                 }
+                composable("Instant") {
+                    InstantMap(navController)
+                }
             }
         }
     }
@@ -72,7 +75,7 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
                 googleMap.moveCamera(cameraUpdate)
 
 
-                googleMap.setOnMapClickListener { clickedLatLng ->
+                /*googleMap.setOnMapClickListener { clickedLatLng ->
                     googleMap.clear()
 
                     val geocoder = Geocoder(context)
@@ -80,7 +83,22 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
                     val locationName = addresses?.getOrNull(0)?.getAddressLine(0) ?: "Unknown Location"
 
                     googleMap.addMarker(MarkerOptions().position(clickedLatLng)/*.title(locationName)*/)
+                }*/
+                googleMap.setOnMapClickListener { clickedLatLng ->
+                    googleMap.clear()
+
+                    val geocoder = Geocoder(context)
+                    val addresses =
+                        geocoder.getFromLocation(clickedLatLng.latitude, clickedLatLng.longitude, 1)
+                    val address = addresses?.getOrNull(0)
+
+                    // 施設名または通り名を取得
+                    val facilityName =
+                        address?.featureName ?: address?.thoroughfare ?: "Unknown Location"
+
+                    googleMap.addMarker(MarkerOptions().position(clickedLatLng).title(facilityName))
                 }
+
             }
             mapView = newMapView
             newMapView
@@ -92,9 +110,8 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
             }
         }
     )
-
-
 }
+
 
 @Preview(showBackground = true)
 @Composable
