@@ -23,11 +23,6 @@ import com.google.android.libraries.places.api.Places
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (!Places.isInitialized()) {
-            Places.initialize(applicationContext, "GOOGLE_MAPS_API_KEY")
-        }
-
         setContent {
             val navController = rememberNavController()
 
@@ -36,11 +31,9 @@ class MainActivity : ComponentActivity() {
                     MainScreen(navController)
                 }
                 composable("anotherScreen") {
-                    // ここに移動先の画面を設定
                     AnotherScreen(navController)
                 }
                 composable("JoinScreen") {
-                    // ここに移動先の画面を設定
                     JoinScreen(navController)
                 }
                 composable("Instant") {
@@ -73,32 +66,6 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
                 val latLng = LatLng(37.523611, 139.937778)
                 val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
                 googleMap.moveCamera(cameraUpdate)
-
-
-                /*googleMap.setOnMapClickListener { clickedLatLng ->
-                    googleMap.clear()
-
-                    val geocoder = Geocoder(context)
-                    val addresses = geocoder.getFromLocation(clickedLatLng.latitude, clickedLatLng.longitude, 1)
-                    val locationName = addresses?.getOrNull(0)?.getAddressLine(0) ?: "Unknown Location"
-
-                    googleMap.addMarker(MarkerOptions().position(clickedLatLng)/*.title(locationName)*/)
-                }*/
-                googleMap.setOnMapClickListener { clickedLatLng ->
-                    googleMap.clear()
-
-                    val geocoder = Geocoder(context)
-                    val addresses =
-                        geocoder.getFromLocation(clickedLatLng.latitude, clickedLatLng.longitude, 1)
-                    val address = addresses?.getOrNull(0)
-
-                    // 施設名または通り名を取得
-                    val facilityName =
-                        address?.featureName ?: address?.thoroughfare ?: "Unknown Location"
-
-                    googleMap.addMarker(MarkerOptions().position(clickedLatLng).title(facilityName))
-                }
-
             }
             mapView = newMapView
             newMapView
