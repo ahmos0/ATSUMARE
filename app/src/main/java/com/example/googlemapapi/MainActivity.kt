@@ -1,11 +1,13 @@
 package com.example.googlemapapi
 
+import RegisterScreen
 import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,8 +35,8 @@ class MainActivity : ComponentActivity() {
                 composable("anotherScreen") {
                     AnotherScreen(navController)
                 }
-                composable("JoinScreen") {
-                    JoinScreen(navController)
+                composable("RegisterScreen") {
+                    RegisterScreen(navController)
                 }
                 composable("Instant") {
                     InstantMap(navController)
@@ -47,9 +49,12 @@ class MainActivity : ComponentActivity() {
 //最初に呼び出される画面
 @Composable
 fun MainScreen(navController: NavController) {
+    var isButtonClicked by remember { mutableStateOf(false) }
     Column {
         TopAppBarSample()
-        BottomBar(navController)
+        BottomBar(navController, isButtonClicked = isButtonClicked, setButtonClicked = { isButtonClicked = it }){ innerPadding ->
+            GoogleMapScreen(modifier = Modifier.padding(innerPadding))
+        }
     }
 }
 

@@ -46,37 +46,10 @@ fun TopAppBarSample() {
     )
 }
 
-/*@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
-    val carImage: Painter = painterResource(R.drawable.directions_car_24px)
-    val peopleImage: Painter = painterResource(R.drawable.emoji_people_24px)
-    val buttonImage: Painter = painterResource(R.drawable.radio_button_checked_24px)
-    val ImageSizeModifier = Modifier.size(70.dp)
-
-    Scaffold(
-        bottomBar = {
-            Box {
-                BottomBarContent(
-                    carImage = carImage,
-                    peopleImage = peopleImage,
-                    ImageSizeModifier = ImageSizeModifier,
-                    navController = navController
-                )
-                FloatingActionOverlayButton(
-                    buttonImage = buttonImage,
-                )
-            }
-        }
-    ) { innerPadding ->
-        //MapMarker(modifier = Modifier.padding(innerPadding))
-        GoogleMapScreen(modifier = Modifier.padding(innerPadding))
-    }
-}*/
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
+fun BottomBar(navController: NavController, modifier: Modifier = Modifier,isButtonClicked: Boolean,
+              setButtonClicked: (Boolean) -> Unit, content: @Composable (PaddingValues) -> Unit) {
     val carImage: Painter = painterResource(R.drawable.directions_car_24px)
     val peopleImage: Painter = painterResource(R.drawable.emoji_people_24px)
     val buttonImage: Painter = painterResource(R.drawable.radio_button_checked_24px)
@@ -95,12 +68,15 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
                     navController = navController
                 )
                 FloatingActionOverlayButton(
-                    buttonImage = buttonImage
+                    buttonImage = buttonImage,
+                    onButtonClicked = {
+                        setButtonClicked(true)
+                    }
                 )
             }
         }
     ) { innerPadding ->
-        GoogleMapScreen(modifier = Modifier.padding(innerPadding))
+        content(innerPadding)
     }
 }
 
@@ -127,7 +103,7 @@ fun BottomBarContent(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                IconButton(onClick = { navController.navigate("anotherScreen") }) {
+                IconButton(onClick = { navController.navigate("RegisterScreen") }) {
                     Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
                 }
                 Text(text = "ATUMERU")
@@ -148,125 +124,19 @@ fun BottomBarContent(
     }
 }
 
-
-/*@Composable
-fun BottomBarContent(
-    carImage: Painter,
-    peopleImage: Painter,
-    ImageSizeModifier: Modifier,
-    navController: NavController
-) {
-    BottomAppBar(
-        modifier = Modifier
-            .height(72.dp)
-            .fillMaxWidth()
-            .offset(y = 623.dp),
-        containerColor = Color.White,
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .offset(x = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                IconButton(onClick = { navController.navigate("anotherScreen") }) {
-                    Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
-                }
-                Text(text = "ATUMERU", modifier = Modifier .offset(x = -7.dp))
-            }
-            Column {
-                IconButton(onClick = { navController.navigate("JoinScreen") }) {
-                    Icon(
-                        peopleImage,
-                        contentDescription = "Localized description",
-                        modifier = ImageSizeModifier
-                    )
-                }
-                Text(text = "ATUMARU", modifier = Modifier .offset(x = -7.dp))
-            }
-        }
-    }
-}
 @Composable
 fun FloatingActionOverlayButton(
     buttonImage: Painter,
+    onButtonClicked: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(), // 必要に応じて修正してください
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        FloatingActionButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .offset(y = 275.dp, x = (-157).dp)
-                .size(75.dp),
-            shape = CircleShape,
-            containerColor = Color(228, 98, 102)
-        ) {
-            Icon(buttonImage, contentDescription = null, Modifier.size(45.dp))
-        }
-    }
-}*/
-
-/*@Composable
-fun BottomBarContent(
-    carImage: Painter,
-    peopleImage: Painter,
-    ImageSizeModifier: Modifier,
-    navController: NavController
-) {
-    BottomAppBar(
-        modifier = Modifier
-            .height(72.dp)
-            .fillMaxWidth(),
-        containerColor = Color.White,
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp), // ここを調整
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(onClick = { navController.navigate("anotherScreen") }) {
-                    Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
-                }
-                Text(text = "ATUMERU")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                IconButton(onClick = { navController.navigate("JoinScreen") }) {
-                    Icon(
-                        peopleImage,
-                        contentDescription = "Localized description",
-                        modifier = ImageSizeModifier
-                    )
-                }
-                Text(text = "ATUMARU")
-            }
-        }
-    }
-}*/
-
-@Composable
-fun FloatingActionOverlayButton(
-    buttonImage: Painter,
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(), // 必要に応じて修正してください
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         FloatingActionButton(
-            onClick = { /*TODO*/ },
+            onClick = onButtonClicked,
             modifier = Modifier.align(Alignment.BottomCenter)
-                .padding(bottom = 16.dp) // ここでボタンの位置を調整
+                .padding(bottom = 16.dp)
                 .size(75.dp),
             shape = CircleShape,
             containerColor = Color(228, 98, 102)
