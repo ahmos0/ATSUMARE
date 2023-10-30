@@ -8,6 +8,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -38,6 +44,14 @@ class MainActivity : ComponentActivity() {
                 composable("Instant") {
                     InstantMap(navController)
                 }
+                composable("JoinScreen") {
+                    JoinScreen(navController)
+                }
+                composable("PassengerMap/{departure}") {
+                    val departure = it.arguments?.getString("departure")
+                    PassengerMap(navController = navController, departure = departure ?: "")
+                }
+
             }
         }
     }
@@ -49,7 +63,10 @@ fun MainScreen(navController: NavController) {
     var isButtonClicked by remember { mutableStateOf(false) }
     Column {
         TopAppBarSample()
-        BottomBar(navController, isButtonClicked = isButtonClicked, setButtonClicked = { isButtonClicked = it }){ innerPadding ->
+        BottomBar(
+            navController,
+            isButtonClicked = isButtonClicked,
+            setButtonClicked = { isButtonClicked = it }) { innerPadding ->
             GoogleMapScreen(modifier = Modifier.padding(innerPadding))
         }
     }
