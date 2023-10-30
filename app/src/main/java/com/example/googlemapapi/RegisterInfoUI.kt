@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -15,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,26 +30,31 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.googlemapapi.BottomBar
+import com.example.googlemapapi.DataBase
+import com.example.googlemapapi.GoogleMapScreen
+import com.example.googlemapapi.TopAppBarSample
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
-fun RegisterInfoUI() {
+fun RegisterInfoUI(modifier: Modifier = Modifier, isButtonClicked: Boolean ) {
     var name by remember { mutableStateOf(TextFieldValue()) }
     var departure by remember { mutableStateOf(TextFieldValue()) }
     var destination by remember { mutableStateOf(TextFieldValue()) }
     var departureTime by remember { mutableStateOf(TextFieldValue()) }
     var capacity by remember { mutableStateOf(TextFieldValue()) }
-    var isButtonClicked by remember { mutableStateOf(false) }
     Box(){
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
+                .offset(y = (-35).dp)
         ) {
             val width = size.width
             val height = size.height
             drawRect(
-                color = Color(197,198,184),  // 背景色を指定
+                color = Color(197,198,184),
                 size = Size(width, height)
             )
             drawRoundRect(
@@ -60,7 +67,8 @@ fun RegisterInfoUI() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(35.dp),
+                .padding(35.dp)
+                .offset(y = (-40).dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
@@ -119,21 +127,46 @@ fun RegisterInfoUI() {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    isButtonClicked = true
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(210,180,140),
-                    contentColor = Color.White
+        }
+    }
+    LaunchedEffect(isButtonClicked) {
+        if (isButtonClicked) {
+            val dataBase = DataBase() // データベースクラスのインスタンスを作成
+
+            val nameValue = name.text
+            val departureValue = departure.text
+            val destinationValue = destination.text
+            val departureTimeValue = departureTime.text
+            val capacityValue = capacity.text
+
+            // GraphQL ミューテーションを非同期に実行
+            try {
+                dataBase.executeMutation(
+                    uuid = UUID.randomUUID().toString(),
+                    name = nameValue,
+                    departure = departureValue,
+                    destination = destinationValue,
+                    time = departureTimeValue,
+                    capacity = capacityValue.toInt(),
+                    passenger = 0
                 )
-                ) {
-                Text(
-                    text = "登録",
-                    color = Color.White
-                )
+                println("hoge");
+            } catch (e: Exception) {
+                // エラーハンドリング
+                e.printStackTrace()
+                println("hoge");
             }
         }
     }
 }
 
+@Composable
+fun RegisterScreen(navController: NavController){
+    Column {
+        var isButtonClicked by remember { mutableStateOf(false) }
+        TopAppBarSample()
+        BottomBar(navController, isButtonClicked = isButtonClicked, setButtonClicked = { isButtonClicked = it }) { innerPadding ->
+            RegisterInfoUI(modifier = Modifier.padding(innerPadding), isButtonClicked = isButtonClicked)
+        }
+    }
+}
