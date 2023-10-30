@@ -1,15 +1,13 @@
 package com.example.googlemapapi
 
+
+import RegisterScreen
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
@@ -32,12 +30,13 @@ class MainActivity : ComponentActivity() {
                     MainScreen(navController)
                 }
                 composable("anotherScreen") {
-                    // ここに移動先の画面を設定
                     AnotherScreen(navController)
                 }
-                composable("JoinScreen") {
-                    // ここに移動先の画面を設定
-                    JoinScreen(navController)
+                composable("RegisterScreen") {
+                    RegisterScreen(navController)
+                }
+                composable("Instant") {
+                    InstantMap(navController)
                 }
             }
         }
@@ -47,9 +46,12 @@ class MainActivity : ComponentActivity() {
 //最初に呼び出される画面
 @Composable
 fun MainScreen(navController: NavController) {
+    var isButtonClicked by remember { mutableStateOf(false) }
     Column {
         TopAppBarSample()
-        BottomBar(navController)
+        BottomBar(navController, isButtonClicked = isButtonClicked, setButtonClicked = { isButtonClicked = it }){ innerPadding ->
+            GoogleMapScreen(modifier = Modifier.padding(innerPadding))
+        }
     }
 }
 
@@ -77,8 +79,9 @@ fun GoogleMapScreen(modifier: Modifier = Modifier) {
             }
         }
     )
-
 }
+
+
 @Preview(showBackground = true)
 @Composable
 fun Preview() {

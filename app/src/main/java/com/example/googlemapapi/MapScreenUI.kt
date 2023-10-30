@@ -37,7 +37,9 @@ fun TopAppBarSample() {
         title = {
             Text(
                 text = "ATUMARE",
-                modifier = Modifier.fillMaxWidth() .offset(x = (-10).dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(x = (-10).dp),
                 textAlign = TextAlign.Center
             )
         }
@@ -46,7 +48,8 @@ fun TopAppBarSample() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
+fun BottomBar(navController: NavController, modifier: Modifier = Modifier,isButtonClicked: Boolean,
+              setButtonClicked: (Boolean) -> Unit, content: @Composable (PaddingValues) -> Unit) {
     val carImage: Painter = painterResource(R.drawable.directions_car_24px)
     val peopleImage: Painter = painterResource(R.drawable.emoji_people_24px)
     val buttonImage: Painter = painterResource(R.drawable.radio_button_checked_24px)
@@ -54,7 +57,10 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
 
     Scaffold(
         bottomBar = {
-            Box {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
                 BottomBarContent(
                     carImage = carImage,
                     peopleImage = peopleImage,
@@ -63,11 +69,14 @@ fun BottomBar(navController: NavController, modifier: Modifier = Modifier) {
                 )
                 FloatingActionOverlayButton(
                     buttonImage = buttonImage,
+                    onButtonClicked = {
+                        setButtonClicked(true)
+                    }
                 )
             }
         }
     ) { innerPadding ->
-        GoogleMapScreen(modifier = Modifier.padding(innerPadding))
+        content(innerPadding)
     }
 }
 
@@ -81,25 +90,27 @@ fun BottomBarContent(
     BottomAppBar(
         modifier = Modifier
             .height(72.dp)
-            .fillMaxWidth()
-            .offset(y = 623.dp),
+            .fillMaxWidth(),
         containerColor = Color.White,
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .offset(x = 10.dp), //アイコン二つを右にずらす
+                .padding(horizontal = 40.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
-                IconButton(onClick = { navController.navigate("anotherScreen") }) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(onClick = { navController.navigate("RegisterScreen") }) {
                     Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
                 }
-                Text(text = "ATUMERU", modifier = Modifier .offset(x = -7.dp))
+                Text(text = "ATUMERU")
             }
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 IconButton(onClick = { navController.navigate("JoinScreen") }) {
                     Icon(
                         peopleImage,
@@ -107,23 +118,25 @@ fun BottomBarContent(
                         modifier = ImageSizeModifier
                     )
                 }
-                Text(text = "ATUMARU", modifier = Modifier .offset(x = -7.dp))
+                Text(text = "ATUMARU")
             }
         }
     }
 }
+
 @Composable
 fun FloatingActionOverlayButton(
     buttonImage: Painter,
+    onButtonClicked: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(), // 必要に応じて修正してください
-        contentAlignment = Alignment.CenterEnd
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         FloatingActionButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .offset(y = 275.dp, x = (-157).dp)
+            onClick = onButtonClicked,
+            modifier = Modifier.align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
                 .size(75.dp),
             shape = CircleShape,
             containerColor = Color(228, 98, 102)
