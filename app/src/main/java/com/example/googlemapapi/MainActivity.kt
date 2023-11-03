@@ -2,7 +2,6 @@ package com.example.googlemapapi
 
 
 import RegisterScreen
-import android.location.Geocoder
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
