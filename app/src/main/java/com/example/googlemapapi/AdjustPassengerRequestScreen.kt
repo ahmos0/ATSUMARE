@@ -1,5 +1,6 @@
 package com.example.googlemapapi
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,15 +29,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
-fun AdjustPssengerRequestScreenUI() {
-    var name by remember { mutableStateOf(TextFieldValue()) }
-    var request by remember { mutableStateOf(TextFieldValue()) }
+fun AdjustPassengerRequestScreenUI(
+                                   departure: String,
+                                   isButtonClicked: Boolean,
+                                   namePassenger: String,
+                                   request: String,
+                                   onNameChange: (String) -> Unit,
+                                   onRequestChange: (String) -> Unit) {
+    var nameState by remember { mutableStateOf(TextFieldValue(namePassenger)) }
+    var requestState by remember { mutableStateOf(TextFieldValue(request)) }
     Box {
-        GoogleMapScreen()
+        SearchDepature(departure)
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -57,8 +66,12 @@ fun AdjustPssengerRequestScreenUI() {
         ) {
             Spacer(modifier = Modifier.height(5.dp))
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = nameState,
+                onValueChange = {
+                    Log.d("AdjustPassengerRequestScreenUI", "Name input: ${it.text}")
+                    nameState = it
+                    onNameChange(it.text) // 変更された値をコールバックを通じて外部に通知
+                },
                 label = { Text("名前") },
                 modifier = Modifier
                     .width(100.dp)
@@ -69,8 +82,12 @@ fun AdjustPssengerRequestScreenUI() {
             )
             Spacer(modifier = Modifier.height(5.dp))
             OutlinedTextField(
-                value = request,
-                onValueChange = { request = it },
+                value = requestState,
+                onValueChange = {
+                    Log.d("AdjustPassengerRequestScreenUI", "Request input: ${it.text}")
+                    requestState = it
+                    onRequestChange(it.text) // 変更された値をコールバックを通じて外部に通知
+                },
                 label = { Text("要望をここに入力") },
                 modifier = Modifier
                     .fillMaxWidth()

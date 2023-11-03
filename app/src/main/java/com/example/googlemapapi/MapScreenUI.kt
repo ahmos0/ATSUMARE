@@ -36,7 +36,7 @@ fun TopAppBarSample() {
     TopAppBar(
         title = {
             Text(
-                text = "ATUMARE",
+                text = "ATSUMARE",
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(x = (-10).dp),
@@ -106,7 +106,7 @@ fun BottomBarContent(
                 IconButton(onClick = { navController.navigate("RegisterScreen") }) {
                     Icon(carImage, contentDescription = null, modifier = ImageSizeModifier)
                 }
-                Text(text = "ATUMERU")
+                Text(text = "ATSUMERU")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -118,7 +118,7 @@ fun BottomBarContent(
                         modifier = ImageSizeModifier
                     )
                 }
-                Text(text = "ATUMARU")
+                Text(text = "ATSUMARU")
             }
         }
     }
