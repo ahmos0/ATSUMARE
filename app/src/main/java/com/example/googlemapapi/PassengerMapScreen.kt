@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,20 +17,40 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun PassengerMap(navController: NavController, departure: String){
     println("hoge")
+    var isButtonClicked by remember { mutableStateOf(false) }
     Column {
-        var isButtonClicked by remember { mutableStateOf(false) }
         TopAppBarSample()
         BottomBar(
             navController,
             isButtonClicked = isButtonClicked,
             setButtonClicked = { isButtonClicked = it }) { innerPadding ->
             if (departure != null) {
-                SearchDepature(departure)
+                //SearchDepature(departure)
+                PassengerRequestScreenUI(departure)
+                //PassengerRequestScreenUI()
             }
+        }
+    }
+    LaunchedEffect(isButtonClicked) {
+        if (isButtonClicked) {
+            // ... 他の初期化など
+
+            launch(Dispatchers.IO) { // バックグラウンドスレッドでの実行
+                try {
+                    // ... データベース操作
+                } catch (e: Exception) {
+                    // エラーハンドリング
+                }
+            }
+
+            // UIスレッドでの状態更新
+            isButtonClicked = false
         }
     }
 }
