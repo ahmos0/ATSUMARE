@@ -2,6 +2,7 @@ package com.example.googlemapapi
 
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -19,41 +20,61 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun PassengerMap(navController: NavController, departure: String){
-    println("hoge")
+fun PassengerMap(navController: NavController, uuid: String, departure: String, name: String){
     var isButtonClicked by remember { mutableStateOf(false) }
+    var nameValue by remember { mutableStateOf("") }
+    var requestValue by remember { mutableStateOf("") }
+    Log.d("PassengerMap", "UUID: $uuid")
+
     Column {
         TopAppBarSample()
         BottomBar(
             navController,
             isButtonClicked = isButtonClicked,
-            setButtonClicked = { isButtonClicked = it }) { innerPadding ->
+            setButtonClicked = { isButtonClicked = it }
+        ) { innerPadding ->
             if (departure != null) {
-                //SearchDepature(departure)
-                PassengerRequestScreenUI(departure)
-                //PassengerRequestScreenUI()
+                AdjustPassengerRequestScreenUI(
+                    departure = departure,
+                    isButtonClicked = isButtonClicked,
+                    namePassenger = nameValue,
+                    request = requestValue,
+                    onNameChange = { newName -> nameValue = newName },
+                    onRequestChange = { newRequest -> requestValue = newRequest }
+                )
             }
         }
     }
+
+    LaunchedEffect(nameValue, requestValue) {
+        Log.d("PassengerMap", "nameValue updated: $nameValue")
+        Log.d("PassengerMap", "requestValue updated: $requestValue")
+    }
+
+    // ボタンがクリックされたかの状態変化を監視
     LaunchedEffect(isButtonClicked) {
         if (isButtonClicked) {
-            // ... 他の初期化など
-
-            launch(Dispatchers.IO) { // バックグラウンドスレッドでの実行
+            Log.d("PassengerMap", "Button clicked with: NameValue: $nameValue, RequestValue: $requestValue")
+            val dataBase = DataBase()
+            val currentNameValue = nameValue
+            val currentRequestValue = requestValue
+            launch(Dispatchers.IO) {
                 try {
-                    // ... データベース操作
+                    dataBase.incrementPassenger(uuid, name, currentNameValue, currentRequestValue)
+                    withContext(Dispatchers.Main) {
+                        isButtonClicked = false
+                    }
                 } catch (e: Exception) {
-                    // エラーハンドリング
+                    e.printStackTrace()
                 }
             }
-
-            // UIスレッドでの状態更新
-            isButtonClicked = false
         }
     }
 }
+
 
 @Composable
 fun SearchDepature(departure: String) {
@@ -88,9 +109,13 @@ fun SearchDepature(departure: String) {
                         googleMap.addMarker(
                             MarkerOptions().position(searchedLatLng!!).title(departure)
                         )
+
+                        val adjustedLatLng = LatLng(searchedLatLng!!.latitude - 0.005, searchedLatLng!!.longitude)
+
                         googleMap.moveCamera(
                             CameraUpdateFactory.newLatLngZoom(
-                                searchedLatLng!!,
+                                //searchedLatLng!!,
+                                adjustedLatLng,
                                 15f
                             )
                         )
@@ -107,3 +132,5 @@ fun SearchDepature(departure: String) {
         }
     )
 }
+
+

@@ -46,9 +46,11 @@ class MainActivity : ComponentActivity() {
                 composable("JoinScreen") {
                     JoinScreen(navController)
                 }
-                composable("PassengerMap/{departure}") {
+                composable("PassengerMap/{departure}/{uuid}/{name}") {
                     val departure = it.arguments?.getString("departure")
-                    PassengerMap(navController = navController, departure = departure ?: "")
+                    val uuid = it.arguments?.getString("uuid")
+                    val name = it.arguments?.getString("name")
+                    PassengerMap(navController = navController, uuid = uuid ?: "", departure = departure ?: "", name = name ?: "")
                 }
 
             }

@@ -128,7 +128,7 @@ fun RegisterInfoUI(modifier: Modifier = Modifier, isButtonClicked: Boolean ) {
     }
     LaunchedEffect(isButtonClicked) {
         if (isButtonClicked) {
-            val dataBase = DataBase() // データベースクラスのインスタンスを作成
+            val dataBase = DataBase()
 
             val nameValue = name.text
             val departureValue = departure.text
@@ -136,7 +136,6 @@ fun RegisterInfoUI(modifier: Modifier = Modifier, isButtonClicked: Boolean ) {
             val departureTimeValue = departureTime.text
             val capacityValue = capacity.text
 
-            // GraphQL ミューテーションを非同期に実行
             try {
                 dataBase.executeMutation(
                     uuid = UUID.randomUUID().toString(),
@@ -148,11 +147,8 @@ fun RegisterInfoUI(modifier: Modifier = Modifier, isButtonClicked: Boolean ) {
                     passenger = 0,
                     passengers = listOf(PassengerInput("hamada", "こんにちわ"))
                 )
-                println("hoge");
             } catch (e: Exception) {
-                // エラーハンドリング
                 e.printStackTrace()
-                println("hoge");
             }
         }
     }

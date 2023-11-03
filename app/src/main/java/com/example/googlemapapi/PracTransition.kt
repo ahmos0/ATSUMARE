@@ -87,7 +87,7 @@ fun RegistrationScreen() {
     //DB処理をボタンを押されたらするように
     LaunchedEffect(isButtonClicked) {
         if (isButtonClicked) {
-            val dataBase = DataBase() // データベースクラスのインスタンスを作成
+            val dataBase = DataBase()
 
             val nameValue = name.text
             val departureValue = departure.text
@@ -95,7 +95,6 @@ fun RegistrationScreen() {
             val departureTimeValue = departureTime.text
             val capacityValue = capacity.text
 
-            // GraphQL ミューテーションを非同期に実行
             try {
                 dataBase.executeMutation(
                     uuid = UUID.randomUUID().toString(),
@@ -108,7 +107,6 @@ fun RegistrationScreen() {
                 )
                 println("hoge");
             } catch (e: Exception) {
-                // エラーハンドリング
                 e.printStackTrace()
             } finally {
                 isButtonClicked = false

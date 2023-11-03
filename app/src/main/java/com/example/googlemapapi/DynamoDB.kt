@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import software.amazon.awssdk.services.dynamodb.endpoints.internal.Value.Str
 
 class DataBase {
 
@@ -72,14 +73,15 @@ class DataBase {
         }
     }
 
-    suspend fun incrementPassenger(uuid: String, name: String) {
-        val mutation = IncrementPassengerMutation(uuid, name)
+    suspend fun incrementPassenger(uuid: String, name: String, namelist: String,comment: String) {
+        val newPassengerInput = PassengerInput(namelist, comment)
+        val passengerInputList = listOf(newPassengerInput)
+        val mutation = IncrementPassengerMutation(uuid, name, Optional.Present(passengerInputList))
 
         try {
-            val call: ApolloCall<IncrementPassengerMutation.Data> = apolloClient.mutate(mutation)
+            val call: ApolloCall<IncrementPassengerMutation.Data> = apolloClient.mutation(mutation)
             val response: ApolloResponse<IncrementPassengerMutation.Data> = call.execute()
             val updatedItem = response.data?.incrementPassenger
-            println("Updated Passenger Count: ${updatedItem?.passenger}")
         } catch (e: ApolloException) {
             // エラー処理
             e.printStackTrace()
