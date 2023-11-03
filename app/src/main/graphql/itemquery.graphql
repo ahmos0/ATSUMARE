@@ -7,5 +7,9 @@ query AllItems {
         time
         capacity
         passenger
+        passengers {
+             namelist,
+             comment
+        }
     }
 }

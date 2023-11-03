@@ -26,17 +26,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
-fun PssengerRequestScreenUI() {
+fun PassengerRequestScreenUI(departure: String) {
     var name by remember { mutableStateOf(TextFieldValue()) }
     var request by remember { mutableStateOf(TextFieldValue()) }
     Box {
-        GoogleMapScreen()
+        SearchDepature(departure)
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -45,14 +43,14 @@ fun PssengerRequestScreenUI() {
             val height = size.height
             drawRoundRect(
                 color = Color(230, 230, 230),
-                topLeft = Offset(60f, 1900f),
-                size = Size(width - 2 * 60f, height - 2 * 1200f),
+                topLeft = Offset(60f, 1700f),
+                size = Size(width - 2 * 60f, height - 2 * 1200f + 100f),
                 cornerRadius = CornerRadius(x = 25F, y = 25F)
             )
         }
         Column(
             modifier = Modifier
-                .offset(y = 250.dp)
+                .offset(y = 200.dp)
                 .fillMaxSize()
                 .padding(35.dp),
             verticalArrangement = Arrangement.Center
@@ -76,7 +74,7 @@ fun PssengerRequestScreenUI() {
                 label = { Text("要望をここに入力") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(45.dp),
+                    .height(60.dp),
                 colors = TextFieldDefaults.textFieldColors(
                     containerColor = Color.Transparent,
                 ),

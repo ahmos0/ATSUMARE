@@ -1,5 +1,5 @@
-mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destination: String!, $time: String!, $capacity: Int!, $passenger: Int!) {
-    putItem(uuid: $uuid, name: $name, departure: $departure, destination: $destination, time: $time, capacity: $capacity, passenger: $passenger) {
+mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destination: String!, $time: String!, $capacity: Int!, $passenger: Int!, $passengers: [PassengerInput]) {
+    putItem(uuid: $uuid, name: $name, departure: $departure, destination: $destination, time: $time, capacity: $capacity, passenger: $passenger, passengers: $passengers) {
         uuid
         name
         departure
@@ -9,8 +9,9 @@ mutation PutItem($uuid: String!, $name: String!, $departure: String!, $destinati
         passenger
     }
 }
-mutation IncrementPassenger($uuid: String!, $name: String!) {
-    incrementPassenger(uuid: $uuid, name: $name) {
+
+mutation IncrementPassenger($uuid: String!, $name: String!, $namelist: String!, $comment: String!) {
+    incrementPassenger(uuid: $uuid, name: $name, namelist: $namelist, comment: $comment) {
         uuid
         name
         departure
@@ -20,3 +21,4 @@ mutation IncrementPassenger($uuid: String!, $name: String!) {
         passenger
     }
 }
+

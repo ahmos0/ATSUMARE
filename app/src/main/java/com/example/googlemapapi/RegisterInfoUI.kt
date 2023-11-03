@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,13 +26,12 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.googlemapapi.BottomBar
 import com.example.googlemapapi.DataBase
-import com.example.googlemapapi.GoogleMapScreen
 import com.example.googlemapapi.TopAppBarSample
+import com.example.googlemapapi.type.PassengerInput
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -148,7 +145,8 @@ fun RegisterInfoUI(modifier: Modifier = Modifier, isButtonClicked: Boolean ) {
                     destination = destinationValue,
                     time = departureTimeValue,
                     capacity = capacityValue.toInt(),
-                    passenger = 0
+                    passenger = 0,
+                    passengers = listOf(PassengerInput("hamada", "こんにちわ"))
                 )
                 println("hoge");
             } catch (e: Exception) {

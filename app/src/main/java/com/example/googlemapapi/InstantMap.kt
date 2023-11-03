@@ -27,9 +27,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 
 @Composable
-fun InstantMap(navController: NavController){
+fun InstantMap(navController: NavController) {
     InstantMapSearch()
 }
+
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,8 +66,15 @@ fun InstantMapSearch(modifier: Modifier = Modifier) {
                     searchedLatLng = LatLng(it.latitude, it.longitude)
                     mapView?.getMapAsync { googleMap ->
                         googleMap.clear()
-                        googleMap.addMarker(MarkerOptions().position(searchedLatLng!!).title(searchText))
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(searchedLatLng!!, 15f))
+                        googleMap.addMarker(
+                            MarkerOptions().position(searchedLatLng!!).title(searchText)
+                        )
+                        googleMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                searchedLatLng!!,
+                                15f
+                            )
+                        )
                     }
                 }
             }

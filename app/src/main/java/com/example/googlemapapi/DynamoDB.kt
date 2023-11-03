@@ -3,8 +3,12 @@ package com.example.googlemapapi
 import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloException
 import com.apollographql.apollo3.network.okHttpClient
+import com.example.googlemapapi.type.PassengerInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -19,13 +23,19 @@ class DataBase {
         )
         .build()
 
-    suspend fun executeMutation(uuid: String,
-                                name: String,
-                                departure: String,
-                                destination: String,
-                                time: String,
-                                capacity: Int,
-                                passenger: Int) {
+    suspend fun executeMutation(
+        uuid: String,
+        name: String,
+        departure: String,
+        destination: String,
+        time: String,
+        capacity: Int,
+        passenger: Int,
+        passengers: List<PassengerInput>? = null
+    ): Result<PutItemMutation.PutItem?> {
+
+        val convertedPassengers = passengers?.map { PassengerInput(it.namelist, it.comment) }
+
         val mutation = PutItemMutation(
             uuid = uuid,
             name = name,
@@ -33,31 +43,32 @@ class DataBase {
             destination = destination,
             time = time,
             capacity = capacity,
-            passenger = passenger
+            passenger = passenger,
+            passengers = convertedPassengers?.let { Optional.Present(it) } ?: Optional.Absent
         )
 
-        try {
-            println("ok")
-            val call: ApolloCall<PutItemMutation.Data> = apolloClient.mutate(mutation)
+        return try {
+            val call: ApolloCall<PutItemMutation.Data> = apolloClient.mutation(mutation)
             val response: ApolloResponse<PutItemMutation.Data> = call.execute()
             val item = response.data?.putItem
-            println(item)
+            Result.success(item)
+
         } catch (e: ApolloException) {
-            // Handle the error
+            Result.failure(e)
         }
     }
 
     suspend fun fetchAllItems(): List<AllItemsQuery.AllItem>? {
         val query = AllItemsQuery()
 
-        try {
-            val call: ApolloCall<AllItemsQuery.Data> = apolloClient.query(query)
-            val response: ApolloResponse<AllItemsQuery.Data> = call.execute()
-            return response.data?.allItems?.filterNotNull()
-        } catch (e: ApolloException) {
-            // Handle the error
-            e.printStackTrace()
-            return null
+        return withContext(Dispatchers.IO) {
+            try {
+                val response: ApolloResponse<AllItemsQuery.Data> = apolloClient.query(query).execute()
+                response.data?.allItems?.filterNotNull()
+            } catch (e: ApolloException) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 

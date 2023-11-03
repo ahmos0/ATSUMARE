@@ -50,9 +50,15 @@ type __Field {
 }
 
 type Mutation {
-  putItem("" time: String!, "" capacity: Int!, "" uuid: String!, "" name: String!, "" departure: String!, "" destination: String!, "" passenger: Int!): Item
-  incrementPassenger(uuid: String!, name: String!): Item
+  putItem(time: String!, capacity: Int!, uuid: String!, name: String!, departure: String!, destination: String!, passenger: Int!,passengers: [PassengerInput]): Item
+  incrementPassenger(uuid: String!, name: String!, namelist: String!,comment: String!): Item
 }
+
+input PassengerInput{
+  namelist: String!,
+  comment: String!
+}
+
 
 """
 The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
@@ -97,7 +103,15 @@ type Item {
   uuid: String
 
   passenger: Int
+
+  passengers: [PassengerModel]
 }
+
+type PassengerModel {
+  namelist: String!,
+  comment: String!
+}
+
 
 """
 An enum describing what kind of type a given `__Type` is
@@ -120,7 +134,7 @@ enum __TypeKind {
 
   """
   Indicates this type is an object. `fields` and `interfaces` are valid fields.
-  """
+  """P
   OBJECT
 
   """
