@@ -1,10 +1,10 @@
-# ATUMARE
-## 今回のルール
-### github flowを用いて開発を行う
-issueごとにブランチを切っていく。issueは自分で立てて大丈夫です。
+# ATSUMARE
+会津大学蒼翔祭のハッカソンで作成 
 
-feature/#1-hogehoge のような名前でブランチを切ってください。
+地域課題を解決するために、ライドシェアアプリを作りました。
 
-feature/#{issue番号}-{実装内容,タスク名}です。
+詳しくは以下のブログを参照 
 
-mergeする際は、PR（プルリクエスト）を出してください。
+https://hahahamada.hatenablog.com/entry/2023/11/11/182532 
+
+https://hahahamada.hatenablog.com/entry/2023/12/08/001837 
